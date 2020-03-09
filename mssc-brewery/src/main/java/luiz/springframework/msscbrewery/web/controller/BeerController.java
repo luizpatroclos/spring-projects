@@ -46,7 +46,7 @@ public class BeerController {
 
         beerService.updateBeerDto(beerId, beerDto);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);   
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }
