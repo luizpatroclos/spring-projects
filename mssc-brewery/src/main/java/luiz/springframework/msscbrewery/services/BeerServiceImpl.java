@@ -1,10 +1,12 @@
 package luiz.springframework.msscbrewery.services;
 
+import lombok.extern.slf4j.Slf4j;
 import luiz.springframework.msscbrewery.web.model.BeerDto;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class BeerServiceImpl implements  BeerService {
 
@@ -30,6 +32,12 @@ public class BeerServiceImpl implements  BeerService {
     public void updateBeerDto(UUID beerId, BeerDto beerDto) {
 
         //todo we should implement something here to update our beer in the data base
+    }
+
+    @Override
+    public void deleteBeer(UUID beerId) {
+
+        log.info("This method is supposed to be implemented by someone who wants to persist in the data base");
     }
 
 

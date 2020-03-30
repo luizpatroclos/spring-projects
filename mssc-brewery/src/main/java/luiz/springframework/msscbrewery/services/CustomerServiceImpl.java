@@ -23,7 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateCustomer(CustomerDto customerDto) {
+    public void updateCustomer(UUID customerId, CustomerDto customerDto) {
 
         log.info("Must be implemented. Some services to persist in DB");
 
@@ -34,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         log.debug("Save new Customer !");
 
-        return CustomerDto.builder().uuid(customerDto.uuid)
+        return CustomerDto.builder().uuid(UUID.randomUUID())
             .name("José")
             .build();
     }

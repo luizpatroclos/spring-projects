@@ -27,30 +27,23 @@ public class CustomerController {
 
     }
 
-    @PostMapping({"/{customerId}"})
-    public ResponseEntity<CustomerDto> handlePost(@PathVariable("customerId") @RequestBody CustomerDto customerDto) {
-
+    @PostMapping
+    public ResponseEntity<CustomerDto> handlePost(@RequestBody CustomerDto customerDto) {
 
         CustomerDto saveCustomer  = customerService.saveNewCustomer(customerDto);
-
         HttpHeaders header = new HttpHeaders();
-
         header.add("Location", "/api/v1/customer/" + saveCustomer.uuid.toString());
 
         return new ResponseEntity<>(header, HttpStatus.ACCEPTED);
 
     }
 
-    @PutMapping({"/{customerDto}"})
-    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("customerDto") @RequestBody CustomerDto customerDto) {
+    @PutMapping({"/{customerId}"})
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("customerId") UUID uuid, @RequestBody CustomerDto customerDto) {
 
-        customerService.updateCustomer(customerDto);
+        customerService.updateCustomer(uuid, customerDto);
 
-        HttpHeaders header = new HttpHeaders();
-
-        header.add("Location", "/api/v1/customer/" + customerDto.toString());
-
-        return new ResponseEntity<>(header, HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping({"/{customerId}"})
