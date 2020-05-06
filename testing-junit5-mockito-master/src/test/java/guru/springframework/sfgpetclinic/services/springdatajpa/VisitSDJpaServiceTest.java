@@ -16,6 +16,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,70 +32,97 @@ class VisitSDJpaServiceTest {
     @Test
     void delete() {
 
+        //given
         Visit visit = new Visit();
 
-        //it can be like that
+        //when
         service.delete(visit);
 
-        //or like that both are doing the same
-        service.delete(any(Visit.class));
+        //given(service.delete(visit)).willReturn(any(Visit.class));
 
+        //or like that both are doing the same
+        //service.delete(any(Visit.class));
+
+        //then
+        then(visitRepository).should().delete(any(Visit.class));
         //verify(visitRepository, times(1)).delete(any(Visit.class)); -- better way
-        verify(visitRepository, times(1)).delete(visit);
+        //verify(visitRepository, times(1)).delete(visit);
 
     }
 
     @Test
     void deleteById() {
+
+        //given ( BDD )
+        // not this case
+
+        //when
         service.deleteById(3l);
-        verify(visitRepository).deleteById(anyLong());
+
+        //then ( BDD )
+        then(visitRepository).should(times(1)).deleteById(3L);
+        //verify(visitRepository).deleteById(anyLong());
+
     }
 
     @Test
     void findById() {
 
+        //given ( BDD )
         Visit visit = new Visit();
-        when(visitRepository.findById(anyLong())).thenReturn(Optional.of(visit));
+        given(visitRepository.findById(anyLong())).willReturn(Optional.of(visit));
+        //when(visitRepository.findById(anyLong())).thenReturn(Optional.of(visit));
 
+        //when ( BDD )
        Visit visit1 = service.findById(anyLong());
 
-        verify(visitRepository).findById(anyLong());
-
-       assertThat(visit1).isInstanceOf(Visit.class);
+       //then ( BDD )
+        then(visitRepository).should().findById(anyLong());
+        assertThat(visit1).isInstanceOf(Visit.class);
+        //verify(visitRepository).findById(anyLong());
 
     }
 
     @Test
     void findAll() {
 
+        // given ( BDD style )
         Visit visit = new Visit();
-
         Set<Visit> visitSet = new HashSet<>();
         visitSet.add(visit);
 
-        when(visitRepository.findAll()).thenReturn(visitSet);
+        given(visitRepository.findAll()).willReturn(visitSet);
+        //when(visitRepository.findAll()).thenReturn(visitSet);
 
+        // when
         Set<Visit> foundVisits = service.findAll();
 
-        verify(visitRepository).findAll();
-
+        //then
+        then(visitRepository).should(times(1)).findAll();
+        //verify(visitRepository).findAll();
         assertThat(foundVisits).hasSize(1);
-
     }
 
     @Test
     void save() {
+
+        //given ( BDD 1)
         Visit visit = new Visit();
 
+        given(visitRepository.save(any(Visit.class))).willReturn(visit);
         //when(visitRepository.save(any(Visit.class))).thenReturn(visit); -- Better way !
-        when(visitRepository.save(visit)).thenReturn(new Visit());
+        //when(visitRepository.save(visit)).thenReturn(new Visit());
 
+        //when
+        Visit visit1 = service.save(new Visit());
         //Visit visit1 = service.save(new Visit()); -- Different as well
-        Visit visit1 = service.save(visit);
 
-        //verify(visitRepository).save(any(Visit.class)); -- Using "any" is better
-        verify(visitRepository).save(visit);
 
+        //then
+        then(visitRepository).should().save(any(Visit.class));
         assertThat(visit1).isNotNull();
+        //verify(visitRepository).save(visit);
+        //verify(visitRepository).save(any(Visit.class)); -- Using "any" is better
+
     }
 }
